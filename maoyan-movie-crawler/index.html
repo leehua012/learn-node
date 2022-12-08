@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Web Crawler</title>
+</head>
+<body>
+    <h1>Maoyan Movie Crawler</h1>
+    <form action="crawler.php" method="post">
+        <label for="url">URL:</label>
+        <input type="text" name="url" id="url" value="https://i.maoyan.com/api/mmdb/movie/v3/list/hot.json?ct=%E5%8C%97%E4%BA%AC&ci=1&channelId=4" placeholder="https://i.maoyan.com/api/mmdb/movie/v3/list/hot.json?ct=%E5%8C%97%E4%BA%AC&ci=1&channelId=4" disabled/>
+        <input type="submit" value="Crawl" />
+    </form>
+
+    <h2>Results</h2>
+    <div id="results"></div>
+    <script>
+        var results = document.getElementById('results');
+        // var url = document.getElementById('url');
+        var url = "https://i.maoyan.com/api/mmdb/movie/v3/list/hot.json?ct=%E5%8C%97%E4%BA%AC&ci=1&channelId=4";
+        var form = document.querySelector('form');
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/data');
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    let HTML = `<table>
+                        <tr>
+                            <th>Movie Name</th>
+                            <th>Movie Score</th>
+                        </tr>`;
+                    responseText = JSON.parse(xhr.responseText);;
+                    console.log(responseText.data.hot);
+                    for (var i = 0; i < responseText.data.hot.length; i++) {
+                        HTML += `<tr>
+                            <td>${responseText.data.hot[i].nm}</td>
+                            <td>${responseText.data.hot[i].sc}</td>
+                        </tr>`;
+                    }
+                    HTML += `</table>`;
+                    results.innerHTML = HTML;
+                }
+                else {
+                    alert('Request failed.  Returned status of ' + xhr.status);
+                }
+            };
+            xhr.send('url=' + encodeURIComponent(url.value));
+        });
+
+        // fetch("http://localhost:3000/data")
+        // .then(res=>res.json())
+        // .then(data=>
+        //   console.log(data)
+        //   )
+    </script>
+</body>
+</html>
