@@ -4,10 +4,10 @@
     <title>Web Crawler</title>
 </head>
 <body>
-    <h1>Maoyan Movie Crawler</h1>
+    <h1>Shopee Crawler</h1>
     <form action="crawler.php" method="post">
         <label for="url">URL:</label>
-        <input type="text" name="url" id="url" value="https://i.maoyan.com/api/mmdb/movie/v3/list/hot.json?ct=%E5%8C%97%E4%BA%AC&ci=1&channelId=4" placeholder="https://i.maoyan.com/api/mmdb/movie/v3/list/hot.json?ct=%E5%8C%97%E4%BA%AC&ci=1&channelId=4" disabled/>
+        <input type="text" name="url" id="url" value="https://shopee.com.my/api/v4/recommend/recommend?bundle=top_products_homepage&limit=20" disabled/>
         <input type="submit" value="Crawl" />
     </form>
 
@@ -16,7 +16,7 @@
     <script>
         var results = document.getElementById('results');
         // var url = document.getElementById('url');
-        var url = "https://i.maoyan.com/api/mmdb/movie/v3/list/hot.json?ct=%E5%8C%97%E4%BA%AC&ci=1&channelId=4";
+        var url = "https://shopee.com.my/api/v4/recommend/recommend?bundle=top_products_homepage&limit=20";
         var form = document.querySelector('form');
         form.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -26,16 +26,17 @@
             xhr.onload = function() {
                 if (xhr.status === 200) {
                     let HTML = `<table>
+                        <legend>Shopee Top 20 Best Selling Products</legend>
                         <tr>
-                            <th>Movie Name</th>
-                            <th>Movie Score</th>
+                            <th>Product Name</th>
+                            <th>Sales</th>
                         </tr>`;
                     responseText = JSON.parse(xhr.responseText);;
-                    console.log(responseText.data.hot);
-                    for (var i = 0; i < responseText.data.hot.length; i++) {
+                    console.log(responseText.data.sections[0].data.top_product);
+                    for (var i = 0; i < responseText.data.sections[0].data.top_product.length; i++) {
                         HTML += `<tr>
-                            <td>${responseText.data.hot[i].nm}</td>
-                            <td>${responseText.data.hot[i].sc}</td>
+                            <td>${responseText.data.sections[0].data.top_product[i].name}</td>
+                            <td>${responseText.data.sections[0].data.top_product[i].count}</td>
                         </tr>`;
                     }
                     HTML += `</table>`;

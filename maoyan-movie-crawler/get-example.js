@@ -35,12 +35,13 @@ http.createServer((req, res) => {
 
 let httpget = (callback) => {
   let data = '';
-  https.get('https://i.maoyan.com/api/mmdb/movie/v3/list/hot.json?ct=%E5%8C%97%E4%BA%AC&ci=1&channelId=4', (res) => {
-    res.setEncoding('utf8');
+  https.get('https://shopee.com.my/api/v4/recommend/recommend?bundle=top_products_homepage&limit=20', (res) => {
+  res.setEncoding('utf8');
     res.on('data', (chunk) => {
       data += chunk;
       console.log('=====================')
       console.log("Crawling data...")
+      // console.log(data)
 
       // console.log(`Data in response: ${data}`);
     });
